@@ -10,6 +10,7 @@ import {
   Badge,
   HStack,
   Divider,
+  Box,
 } from '@chakra-ui/react'
 import { AudioUpload } from '@features/audio-upload/ui/AudioUpload'
 import { TranscriptionResult } from '@widgets/transcription-result/ui/TranscriptionResult'
@@ -91,7 +92,7 @@ export const MainPage = () => {
             <Box>
               <AlertTitle>API недоступен</AlertTitle>
               <AlertDescription fontSize="sm">
-                Убедитесь, что backend сервер запущен на localhost:8000
+                Убедитесь, что backend сервер запущен на localhost:8050
               </AlertDescription>
             </Box>
           </Alert>
