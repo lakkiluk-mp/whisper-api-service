@@ -1,0 +1,7 @@
+openai-whisper
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+python-dotenv
+aiofiles
