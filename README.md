@@ -56,5 +56,6 @@ npm run dev
 
 ## Технологии
 
+
 - **Backend**: FastAPI, OpenAI Whisper, Uvicorn
 - **Frontend**: React, TypeScript, Vite
