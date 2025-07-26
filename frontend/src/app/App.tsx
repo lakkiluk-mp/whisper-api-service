@@ -1,5 +1,5 @@
-import { Box, Container } from '@chakra-ui/react'
-import { MainPage } from '@pages/main'
+import { Box, Container } from "@chakra-ui/react";
+import { MainPage } from "@pages/main";
 
 export const App = () => {
   return (
@@ -8,5 +8,5 @@ export const App = () => {
         <MainPage />
       </Container>
     </Box>
-  )
-}
+  );
+};

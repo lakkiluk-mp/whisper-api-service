@@ -1,51 +1,51 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from "react";
 import {
-  VStack,
-  Heading,
-  Text,
   Alert,
+  AlertDescription,
   AlertIcon,
   AlertTitle,
-  AlertDescription,
   Badge,
-  HStack,
-  Divider,
   Box,
-} from '@chakra-ui/react'
-import { AudioUpload } from '@features/audio-upload/ui/AudioUpload'
-import { TranscriptionResult } from '@widgets/transcription-result/ui/TranscriptionResult'
-import { checkHealth, type HealthResponse } from '@shared/api/whisper'
+  Divider,
+  Heading,
+  HStack,
+  Text,
+  VStack
+} from "@chakra-ui/react";
+import { AudioUpload } from "@features/audio-upload/ui/AudioUpload";
+import { checkHealth, type HealthResponse } from "@shared/api/whisper";
+import { TranscriptionResult } from "@widgets/transcription-result/ui/TranscriptionResult";
 
 export const MainPage = () => {
   const [transcriptionResult, setTranscriptionResult] = useState<{
-    text: string
-    language?: string
-  } | null>(null)
-  const [healthStatus, setHealthStatus] = useState<HealthResponse | null>(null)
-  const [isHealthLoading, setIsHealthLoading] = useState(true)
+    text: string;
+    language?: string;
+  } | null>(null);
+  const [healthStatus, setHealthStatus] = useState<HealthResponse | null>(null);
+  const [isHealthLoading, setIsHealthLoading] = useState(true);
 
   useEffect(() => {
     const checkApiHealth = async () => {
       try {
-        const status = await checkHealth()
-        setHealthStatus(status)
+        const status = await checkHealth();
+        setHealthStatus(status);
       } catch (error) {
-        console.error('Ошибка проверки состояния API:', error)
+        console.error("Ошибка проверки состояния API:", error);
       } finally {
-        setIsHealthLoading(false)
+        setIsHealthLoading(false);
       }
-    }
+    };
 
-    checkApiHealth()
-  }, [])
+    checkApiHealth();
+  }, []);
 
   const handleTranscribeComplete = (result: { text: string; language?: string }) => {
-    setTranscriptionResult(result)
-  }
+    setTranscriptionResult(result);
+  };
 
   const handleClearResult = () => {
-    setTranscriptionResult(null)
-  }
+    setTranscriptionResult(null);
+  };
 
   return (
     <VStack spacing={8} w="full">
@@ -71,14 +71,11 @@ export const MainPage = () => {
             <Badge colorScheme="gray">Проверка...</Badge>
           ) : healthStatus ? (
             <HStack spacing={2}>
-              <Badge colorScheme={healthStatus.status === 'healthy' ? 'green' : 'red'}>
-                {healthStatus.status === 'healthy' ? 'Работает' : 'Недоступен'}
+              <Badge colorScheme={healthStatus.status === "healthy" ? "green" : "red"}>
+                {healthStatus.status === "healthy" ? "Работает" : "Недоступен"}
               </Badge>
-              <Badge 
-                colorScheme={healthStatus.model_loaded ? 'blue' : 'orange'}
-                variant="outline"
-              >
-                Модель: {healthStatus.model_loaded ? 'Загружена' : 'Не загружена'}
+              <Badge colorScheme={healthStatus.model_loaded ? "blue" : "orange"} variant="outline">
+                Модель: {healthStatus.model_loaded ? "Загружена" : "Не загружена"}
               </Badge>
             </HStack>
           ) : (
@@ -86,14 +83,12 @@ export const MainPage = () => {
           )}
         </HStack>
 
-        {!isHealthLoading && (!healthStatus || healthStatus.status !== 'healthy') && (
+        {!isHealthLoading && (!healthStatus || healthStatus.status !== "healthy") && (
           <Alert status="error" borderRadius="md" maxW="md">
             <AlertIcon />
             <Box>
               <AlertTitle>API недоступен</AlertTitle>
-              <AlertDescription fontSize="sm">
-                Убедитесь, что backend сервер запущен на localhost:8050
-              </AlertDescription>
+              <AlertDescription fontSize="sm">Убедитесь, что backend сервер запущен на localhost:8050</AlertDescription>
             </Box>
           </Alert>
         )}
@@ -125,11 +120,9 @@ export const MainPage = () => {
           <AlertDescription fontSize="xs">
             2. Перетащите аудиофайл в область загрузки или нажмите для выбора
           </AlertDescription>
-          <AlertDescription fontSize="xs">
-            3. Нажмите "Транскрибировать" и дождитесь результата
-          </AlertDescription>
+          <AlertDescription fontSize="xs">3. Нажмите Транскрибировать и дождитесь результата</AlertDescription>
         </VStack>
       </Alert>
     </VStack>
-  )
-}
+  );
+};

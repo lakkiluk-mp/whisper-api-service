@@ -1,66 +1,63 @@
-import { useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
-import {
-  Box,
-  Text,
-  VStack,
-  Button,
-  Progress,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-} from '@chakra-ui/react'
-import { transcribeAudio } from '@shared/api/whisper'
+import { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Progress, Text, VStack } from "@chakra-ui/react";
+import { transcribeAudio } from "@shared/api/whisper";
 
 interface AudioUploadProps {
-  onTranscribeComplete: (result: { text: string; language?: string }) => void
+  onTranscribeComplete: (result: { text: string; language?: string }) => void;
 }
 
 export const AudioUpload = ({ onTranscribeComplete }: AudioUploadProps) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
-      setSelectedFile(acceptedFiles[0])
-      setError(null)
+      setSelectedFile(acceptedFiles[0]);
+      setError(null);
     }
-  }, [])
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'audio/*': ['.mp3', '.wav', '.m4a', '.flac', '.ogg', '.wma', '.aac']
+      "audio/*": [".mp3", ".wav", ".m4a", ".flac", ".ogg", ".wma", ".aac"]
     },
     multiple: false,
-    maxSize: 100 * 1024 * 1024, // 100MB
-  })
+    maxSize: 100 * 1024 * 1024 // 100MB
+  });
 
   const handleTranscribe = async () => {
-    if (!selectedFile) return
+    if (!selectedFile) {
+      return;
+    }
 
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
 
     try {
-      const result = await transcribeAudio(selectedFile)
-      onTranscribeComplete(result)
-      setSelectedFile(null)
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Произошла ошибка при транскрибации')
+      const result = await transcribeAudio(selectedFile);
+      onTranscribeComplete(result);
+      setSelectedFile(null);
+    } catch (err: unknown) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ||
+            "Произошла ошибка при транскрибации";
+      setError(errorMessage);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <VStack spacing={4} w="full">
       <Box
         {...getRootProps()}
         border="2px dashed"
-        borderColor={isDragActive ? 'brand.500' : 'gray.300'}
+        borderColor={isDragActive ? "brand.500" : "gray.300"}
         borderRadius="lg"
         p={8}
         w="full"
@@ -68,17 +65,15 @@ export const AudioUpload = ({ onTranscribeComplete }: AudioUploadProps) => {
         cursor="pointer"
         transition="all 0.2s"
         _hover={{
-          borderColor: 'brand.400',
-          bg: 'brand.50',
+          borderColor: "brand.400",
+          bg: "brand.50"
         }}
-        bg={isDragActive ? 'brand.50' : 'white'}
+        bg={isDragActive ? "brand.50" : "white"}
       >
         <input {...getInputProps()} />
         <VStack spacing={3}>
           <Text fontSize="xl" fontWeight="semibold" color="gray.700">
-            {isDragActive
-              ? 'Отпустите файл здесь'
-              : 'Перетащите аудиофайл сюда или нажмите для выбора'}
+            {isDragActive ? "Отпустите файл здесь" : "Перетащите аудиофайл сюда или нажмите для выбора"}
           </Text>
           <Text fontSize="sm" color="gray.500">
             Поддерживаемые форматы: MP3, WAV, M4A, FLAC, OGG, WMA, AAC
@@ -102,13 +97,7 @@ export const AudioUpload = ({ onTranscribeComplete }: AudioUploadProps) => {
       )}
 
       {selectedFile && (
-        <Button
-          onClick={handleTranscribe}
-          isLoading={isLoading}
-          loadingText="Транскрибация..."
-          size="lg"
-          w="full"
-        >
+        <Button onClick={handleTranscribe} isLoading={isLoading} loadingText="Транскрибация..." size="lg" w="full">
           Транскрибировать
         </Button>
       )}
@@ -132,5 +121,5 @@ export const AudioUpload = ({ onTranscribeComplete }: AudioUploadProps) => {
         </Alert>
       )}
     </VStack>
-  )
-}
+  );
+};

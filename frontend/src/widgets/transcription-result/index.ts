@@ -1,1 +1,1 @@
-export { TranscriptionResult } from './ui/TranscriptionResult'
+export { TranscriptionResult } from "./ui/TranscriptionResult";

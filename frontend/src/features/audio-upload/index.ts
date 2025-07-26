@@ -1,1 +1,1 @@
-export { AudioUpload } from './ui/AudioUpload'
+export { AudioUpload } from "./ui/AudioUpload";
